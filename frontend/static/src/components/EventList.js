@@ -127,9 +127,9 @@ class EventList extends Component {
         
 
     render() {
-        console.log(this.state.events);
+        console.log(this.state);
         const events = this.state.events.map(event => (
-                <EventItem key={event.id} event={event} user={this.state.user} created_by={event.created_by} />
+                <EventItem key={event.id} event={event} user={this.state.user} created_by={event.created_by.id} />
         ))
 
         if(this.state.editingEvent){

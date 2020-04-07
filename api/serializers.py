@@ -74,10 +74,28 @@ class MemberSerializer(serializers.ModelSerializer):
         fields = ('user', 'band_member')
         depth = 1
 
+class FollowingSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source='following.id')
+    username = serializers.ReadOnlyField(source='following.username')
+
+    class Meta:
+        model = Connection
+        fields = ('id', 'username',)
+
+
+class FollowerSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source='user.id')
+    username = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = Connection
+        fields = ('id', 'username',)
+        depth = 1
+
 
 class UserSerializer(serializers.ModelSerializer):
-    following = ConnectionSerializer(many=True, source='get_following')
-    followers = ConnectionSerializer(many=True, source='get_followers')
+    following = FollowingSerializer(many=True, source='get_following')
+    followers = FollowerSerializer(many=True, source='get_followers')
     band_following = MemberSerializer(many=True, source='get_band_following')
     band_members = MemberSerializer(many=True, source='get_band_members')
     profile = UserProfileSerializer()

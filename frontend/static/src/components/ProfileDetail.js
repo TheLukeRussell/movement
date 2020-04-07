@@ -107,15 +107,15 @@ render() {
     ))
 
     const followers = this.state.followers.map(follower => (
-        <motion.a whileHover={{scale: 1.1, color: '#C3073F'}} whileTap={{scale:1}} href={`/profile/detail/${follower.user.id}`}>{follower.user.username}</motion.a>
+        <motion.a whileHover={{scale: 1.1, color: '#C3073F'}} whileTap={{scale:1}} href={`/profile/detail/${follower.id}`}>{follower.username}</motion.a>
     ))
 
     const followings = this.state.following.map(following => (
-        <motion.a whileHover={{scale: 1.1, color: '#C3073F'}} whileTap={{scale:1}} href={`/profile/detail/${following.following.id}`}>{following.following.username}</motion.a>
+        <motion.a whileHover={{scale: 1.1, color: '#C3073F'}} whileTap={{scale:1}} href={`/profile/detail/${following.id}`}>{following.username}</motion.a>
     ))
     
     const followerIds = this.state.followers.map(follower => (
-        follower.user.id
+        follower.id
     ))
 
     let alreadyFollows = false;
