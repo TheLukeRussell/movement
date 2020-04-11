@@ -8,22 +8,34 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class TokenUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('band', 'profile',)
+        fields = (
+            "band",
+            "profile",
+        )
         depth = 1
+
 
 class TokenSerializer(serializers.ModelSerializer):
     user = TokenUserSerializer(many=False, read_only=True)
+
     class Meta:
         model = TokenModel
-        fields = ('key', 'user',)
+        fields = (
+            "key",
+            "user",
+        )
+
 
 class InstrumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instrument
-        fields = ['text',]
+        fields = [
+            "text",
+        ]
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -31,12 +43,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = '__all__'
+        fields = "__all__"
         depth = 1
 
-
     def create(self, validated_data):
-        instruments_data = json.loads(self.context['request'].data['instruments'])
+        instruments_data = json.loads(self.context["request"].data["instruments"])
         profile = UserProfile.objects.create(**validated_data)
 
         for instrument in instruments_data:
@@ -45,7 +56,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return profile
 
     def update(self, instance, validated_data):
-        instruments_data = json.loads(self.context['request'].data['instruments'])
+        instruments_data = json.loads(self.context["request"].data["instruments"])
         instance.instruments.clear()
 
         for instrument in instruments_data:
@@ -54,54 +65,88 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
         return instance
 
+
 class BandProfileSerializer(serializers.ModelSerializer):
     # instruments = InstrumentSerializer(many=True, required=False)
 
     class Meta:
         model = BandProfile
-        fields = '__all__'
+        fields = "__all__"
         depth = 1
-        
+
+
 class ConnectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Connection
-        fields = ('user', 'following')
+        fields = ("user", "following")
         depth = 1
+
 
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
-        fields = ('user', 'band_member')
+        fields = ("user", "band_member")
         depth = 1
 
+
 class FollowingSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField(source='following.id')
-    username = serializers.ReadOnlyField(source='following.username')
+    id = serializers.ReadOnlyField(source="following.id")
+    username = serializers.ReadOnlyField(source="following.username")
 
     class Meta:
         model = Connection
-        fields = ('id', 'username',)
+        fields = (
+            "id",
+            "username",
+        )
 
 
 class FollowerSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField(source='user.id')
-    username = serializers.ReadOnlyField(source='user.username')
+    id = serializers.ReadOnlyField(source="user.id")
+    username = serializers.ReadOnlyField(source="user.username")
 
     class Meta:
         model = Connection
-        fields = ('id', 'username',)
+        fields = (
+            "id",
+            "username",
+        )
         depth = 1
 
 
+class BandFollowingSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source="band_member.id")
+    username = serializers.ReadOnlyField(source="band_member.username")
+
+    class Meta:
+        model = Member
+        fields = (
+            "id",
+            "username",
+        )
+
+
+class BandMemberSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source="user.id")
+    username = serializers.ReadOnlyField(source="user.username")
+
+    class Meta:
+        model = Member
+        fields = (
+            "id",
+            "username",
+        )
+
+
 class UserSerializer(serializers.ModelSerializer):
-    following = FollowingSerializer(many=True, source='get_following')
-    followers = FollowerSerializer(many=True, source='get_followers')
-    band_following = MemberSerializer(many=True, source='get_band_following')
-    band_members = MemberSerializer(many=True, source='get_band_members')
+    following = FollowingSerializer(many=True, source="get_following")
+    followers = FollowerSerializer(many=True, source="get_followers")
+    band_following = BandFollowingSerializer(many=True, source="get_band_following")
+    band_members = BandMemberSerializer(many=True, source="get_band_members")
     profile = UserProfileSerializer()
     band = BandProfileSerializer()
-    
+
     class Meta:
         model = User
-        fields = '__all__'
+        fields = "__all__"
         depth = 1

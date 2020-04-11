@@ -99,11 +99,11 @@ render() {
     }
 
     const bandMembers = this.state.band_members.map(band_member => (
-        <motion.a whileHover={{scale: 1.1, color: '#C3073F'}} whileTap={{scale:1}} key={band_member.user.id} href={`/band/detail/${band_member.user.id}`}>{band_member.user.username}</motion.a>
+        <motion.a whileHover={{scale: 1.1, color: '#C3073F'}} whileTap={{scale:1}} key={band_member.id} href={`/band/detail/${band_member.id}`}>{band_member.username}</motion.a>
     ))
 
     const bandMembersIds = this.state.band_members.map(band_member => (
-        band_member.user.id
+        band_member.id
     ))
 
     const followers = this.state.followers.map(follower => (

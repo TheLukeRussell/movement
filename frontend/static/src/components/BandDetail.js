@@ -51,7 +51,7 @@ class BandDetail extends Component {
 render() {
 
     const bandFollowing = this.state.band_following.map(band_following => (
-        <motion.a whileHover={{scale: 1.1, color: '#C3073F'}} whileTap={{scale:1}} href={`/profile/detail/${band_following.band_member.id}`}>{band_following.band_member.username}</motion.a>
+        <motion.a whileHover={{scale: 1.1, color: '#C3073F'}} whileTap={{scale:1}} href={`/profile/detail/${band_following.id}`}>{band_following.username}</motion.a>
     ))
 
     let artistPlay;

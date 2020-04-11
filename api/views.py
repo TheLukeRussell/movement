@@ -1,20 +1,29 @@
 from rest_framework import generics, permissions, viewsets
 from django.shortcuts import get_object_or_404
 from accounts.models import UserProfile, User, Connection, BandProfile, Member
-from .serializers import UserProfileSerializer, UserSerializer, ConnectionSerializer, BandProfileSerializer, MemberSerializer
+from .serializers import (
+    UserProfileSerializer,
+    UserSerializer,
+    ConnectionSerializer,
+    BandProfileSerializer,
+    MemberSerializer,
+)
 
 
 class UserListAPIView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
 class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
 class ProfileList(generics.ListCreateAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+
 
 class UserProfileCreateAPIView(generics.ListCreateAPIView):
     queryset = UserProfile.objects.all()
@@ -23,6 +32,7 @@ class UserProfileCreateAPIView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+
 class UserProfileRetieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
@@ -30,9 +40,11 @@ class UserProfileRetieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIVi
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
+
 class BandProfileList(generics.ListCreateAPIView):
     queryset = BandProfile.objects.all()
     serializer_class = BandProfileSerializer
+
 
 class BandProfileCreateAPIView(generics.ListCreateAPIView):
     queryset = BandProfile.objects.all()
@@ -49,6 +61,7 @@ class BandProfileRetieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIVi
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
+
 class InstrumentRetrieveAPIView(generics.RetrieveAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
@@ -57,18 +70,21 @@ class InstrumentRetrieveAPIView(generics.RetrieveAPIView):
         user = self.request.user
         return UserProfile.objects.filter(instruments=instruments)
 
+
 class ConnectionListCreateAPIView(generics.ListCreateAPIView):
     queryset = Connection.objects.all()
     serializer_class = ConnectionSerializer
 
     def perform_create(self, serializer):
-        following = get_object_or_404(User, pk=self.request.data['following'])
-        serializer.save(user=self.request.user, following=following);
+        following = get_object_or_404(User, pk=self.request.data["following"])
+        serializer.save(user=self.request.user, following=following)
+
 
 class MemberListCreateAPIView(generics.ListCreateAPIView):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
 
     def perform_create(self, serializer):
-        band_member = get_object_or_404(User, pk=self.request.data['band_following'])
-        serializer.save(user=self.request.user, band_member=band_member);
+        band_member = get_object_or_404(User, pk=self.request.data["band_following"])
+        serializer.save(user=self.request.user, band_member=band_member)
+
