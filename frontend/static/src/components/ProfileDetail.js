@@ -170,7 +170,7 @@ class ProfileDetail extends Component {
               this.state.id !== undefined &&
               alreadyFollows === false ? (
                 <form id='event-form' className='p-2' onSubmit={this.handleFollow}>
-                  <button className='btn btn-primary'>Follow</button>
+                  {/* <button className='btn btn-primary'>Follow</button> */}
                 </form>
               ) : null}
               {this.state.id !== this.state.user.pk &&
@@ -178,7 +178,7 @@ class ProfileDetail extends Component {
               JSON.parse(localStorage.getItem('my-app-user')).user.profile === null &&
               alreadyMembers === false ? (
                 <form id='event-form' className='p-2' onSubmit={this.handleAdd}>
-                  {/* <button className='btn btn-primary'>Add Member</button> */}
+                  <button className='btn btn-primary'>Add Member</button>
                 </form>
               ) : null}
             </div>
