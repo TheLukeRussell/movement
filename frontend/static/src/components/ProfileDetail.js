@@ -170,7 +170,7 @@ class ProfileDetail extends Component {
               this.state.id !== undefined &&
               alreadyFollows === false ? (
                 <form id='event-form' className='p-2' onSubmit={this.handleFollow}>
-                  {/* <button className='btn btn-primary'>Follow</button> */}
+                  <button className='btn btn-primary'>Follow</button>
                 </form>
               ) : null}
               {this.state.id !== this.state.user.pk &&
